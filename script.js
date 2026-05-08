@@ -2,14 +2,15 @@ const container_raduis = 5
 const PI = 3.1415;
 const max_container_area = PI * container_raduis**2; //max area is 78.53 m^2
 let weeks = 1;
-let weeks2 = 10;
+
+let weeks2 = 10; //num weeks for part 2
 
 
 
 const plant_area = 0.8; //area of one plant
  
-let num_plants = 20; 
-//Number of plants for part1, expctedt to double each weeek
+let num_plants = 20; //Number of plants for part1, expctedt to double each weeek
+
 let plantsarray = [0,20];//array to keep track of number of plants when we start with 20 plants, EX: plantsarray[1] = number of plants in week 1 
 
 let plantsarray2 = [0,100];//array to keep track of number of plants when we start with 20 plants, EX: plantsarray[1] = number of plants in week 1 
@@ -27,7 +28,7 @@ function calc_num_plants(w){
     //base cases I have an answer to, if we're on week 1 and week 0.
     if(w ==0){
         num_plants= plantsarray[w];
-        current_plants_area = num_plants*plant_area;
+        current_plants_area = num_plants*plant_area;  //update number of plants and current area
         return plantsarray[w];   
     }
     else if(w ==1){
@@ -40,19 +41,20 @@ function calc_num_plants(w){
     else{
 
        
-        if(plantsarray.length == w){   //check if I have the number_of_plants 1 week prior
+        if(plantsarray.length == w){   //check if I have the number of plants 1 week prior
        
         let z = plantsarray[w-1]*2     //Just double the number of plants from a week prior, store it in a temp variable and push it into the array
         plantsarray.push(z);  
         
         num_plants= plantsarray[w];
-        current_plants_area = num_plants*plant_area; //update number of plants AND the current aread they take up 
-        return plantsarray[w];   //Return the number of plants from the week they asked for
+        current_plants_area = num_plants*plant_area; //update number of plants AND the current area they take up 
+
+        return plantsarray[w];   //Return the number of plants from the week they asked for now thats its there
          
         
         }
 
-        //if I dont have number_of_plants from exacatly 1 week prior, keep going back until I do, and populate the array from there, recursivley
+        //if I dont have number of plants from exacatly 1 week prior, keep going back until I do, and populate the array from there, recursivley
         else{
             let z =  calc_num_plants(w-1)*2; //call it recursivley
             plantsarray.push(z);
@@ -65,6 +67,7 @@ function calc_num_plants(w){
    
 }
 
+//duplicate function that works with 100 plants 
 
 function calc_num_plants2(w){
 
