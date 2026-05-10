@@ -1,175 +1,75 @@
-const container_raduis = 5
 const PI = 3.1415;
-const max_container_area = PI * container_raduis**2; //max area is 78.53 m^2
-let weeks = 1;
+const container_radius = 5;
+const container_area = PI * container_radius * container_radius;
+const capacity_80 = container_area * 0.8; //80% of capacity
+const capacity_50 = container_area * 0.5; // 50% of capatiy
+const one_plant_area = 0.8; //Each plant requires a minimum space of 0.8 square meters
 
-let weeks2 = 10; //num weeks for part 2
+let num_plants = 20; //Expected to double each week
+let num_weeks = 1;
+let all_plants_area;
 
+//part 1
+console.log("");
+console.log(
+  "The Maximum area of the contaier is " + container_area + " meters squared",
+);
+console.log("80% capactiy is " + capacity_80 + " meters squared");
+console.log("50% capactiy is " + capacity_50 + " meters squared");
+console.log("");
 
+//for loop that doubles number of plants each week, runs 3 times for 3 weeks
+for (let i = 0; i < 3; i++) {
+  all_plants_area = num_plants * one_plant_area; // calculate area all the plants take up
+  console.log(
+    `We have ${num_plants} total plants in week ${num_weeks}. They take up an area of ${all_plants_area} meters squared.`,
+  ); //print out info for that week
 
-const plant_area = 0.8; //area of one plant
- 
-let num_plants = 20; //Number of plants for part1, expctedt to double each weeek
-
-let plantsarray = [0,20];//array to keep track of number of plants when we start with 20 plants, EX: plantsarray[1] = number of plants in week 1 
-
-let plantsarray2 = [0,100];//array to keep track of number of plants when we start with 20 plants, EX: plantsarray[1] = number of plants in week 1 
-
-
-
-
-
-let current_plants_area; //How much area all the plants are currenly taking up
-
-//start with an algorithim to find number of plants in x weeks
-function calc_num_plants(w){
-
-
-    //base cases I have an answer to, if we're on week 1 and week 0.
-    if(w ==0){
-        num_plants= plantsarray[w];
-        current_plants_area = num_plants*plant_area;  //update number of plants and current area
-        return plantsarray[w];   
-    }
-    else if(w ==1){
-        num_plants= plantsarray[w];
-        current_plants_area = num_plants*plant_area;
-        return plantsarray[w];
-    }
+  //control flow for decisons:
+  switch (true) {
     
-    //asking for a week I dont have the answer too?
-    else{
+    //are we above 80% capacity
+    case all_plants_area > capacity_80:
+      console.log("Please prune the plants");
+      break;
 
-       
-        if(plantsarray.length == w){   //check if I have the number of plants 1 week prior
-       
-        let z = plantsarray[w-1]*2     //Just double the number of plants from a week prior, store it in a temp variable and push it into the array
-        plantsarray.push(z);  
-        
-        num_plants= plantsarray[w];
-        current_plants_area = num_plants*plant_area; //update number of plants AND the current area they take up 
+    //if not, are we above 50%
+    case all_plants_area > capacity_50:
+      console.log("Please monitor the plants");
+      break;
 
-        return plantsarray[w];   //Return the number of plants from the week they asked for now thats its there
-         
-        
-        }
-
-        //if I dont have number of plants from exacatly 1 week prior, keep going back until I do, and populate the array from there, recursivley
-        else{
-            let z =  calc_num_plants(w-1)*2; //call it recursivley
-            plantsarray.push(z);
-            num_plants= plantsarray[w]; //update number of plants  
-            current_plants_area = num_plants*plant_area;  
-            return plantsarray[w];//Return the number of plants from the week they asked for 
-        }
-    }
-
-   
+    //not above 50%
+    default:
+      console.log("Plant more.");
+  }
+  console.log("");
+  num_plants *= 2; //double number of plants
+  num_weeks += 1; //increase week by 1
 }
 
-//duplicate function that works with 100 plants 
+//part 2
+num_plants = 100;
+num_weeks = 1;
+console.log(
+  `\nPart 2 and 3 \nWe are starting with ${num_plants} plants in week ${num_weeks}`,
+);
 
-function calc_num_plants2(w){
+//for loop, runs 10 times for 10 weeks
+for (i = 0; i < 10; i++) {
+  all_plants_area = num_plants * one_plant_area; // calculate area all the plants take up
 
+  console.log(`We have ${num_plants} total plants in week ${num_weeks}. They take up an area of ${all_plants_area} meters.`); //print out info for that week
+  
+  try {
+    if (all_plants_area > container_area)
+      throw `Error. The current area of all the plants ${all_plants_area} meters squared surpasses the maximum capacity of ${container_area}`;
+  } catch (error) {
+    console.log(error);
+  }
 
-    //base cases I have an answer to, if we're on week 1 and week 0.
-    if(w ==0){
-        num_plants= plantsarray2[w];
-        current_plants_area = num_plants*plant_area;
-        return plantsarray2[w];   
-    }
-    else if(w ==1){
-        num_plants= plantsarray2[w];
-        current_plants_area = num_plants*plant_area;
-        return plantsarray2[w];
-    }
-    
-    //asking for a week I dont have the answer too?
-    else{
-
-       
-        if(plantsarray2.length == w){   //check if I have the number_of_plants 1 week prior
-       
-        let z = plantsarray2[w-1]*2     //Just double the number of plants from a week prior, store it in a temp variable and push it into the array
-        plantsarray2.push(z);  
-        
-        num_plants= plantsarray2[w];
-        current_plants_area = num_plants*plant_area; //update number of plants AND the current aread they take up 
-        return plantsarray2[w];   //Return the number of plants from the week they asked for
-         
-        
-        }
-
-        //if I dont have number_of_plants from exacatly 1 week prior, keep going back until I do, and populate the array from there, recursivley
-        else{
-            let z =  calc_num_plants2(w-1)*2; //call it recursivley
-            plantsarray2.push(z);
-            num_plants= plantsarray2[w]; //update number of plants  
-            current_plants_area = num_plants*plant_area;  
-            return plantsarray2[w];//Return the number of plants from the week they asked for 
-        }
-    }
-
-   
-}
-//fucntion to give action to be taken dependant on if the current area of the plants surpasses our capacity
-
-function action(){  
-    //above 80% capacity? prune
-    if(current_plants_area>0.8*max_container_area){
-       return ("Please prune the garden.");
-
-    }
-    //between 50 and 80? Monitor
-    else if(current_plants_area< (0.5*max_container_area) && current_plants_area >(0.8 *max_container_area) ){
-        return ("Please monitor the garden.");
-    }
-
-    else{
-        return ("Please plant more plants");
-    }
+  console.log("");
+  num_plants *= 2; //double number of plants
+  num_weeks += 1; //increase week by 1
 }
 
-console.log(`The Maximum area of the container is ${max_container_area} m^2`);
-console.log(`80% Capacity is ${0.8*max_container_area}`);
-console.log(`50% Capacity is ${0.5*max_container_area} `);
-console.log("");
-
-// Part 1
-// week 1
-console.log("We are in week 1!");
-console.log(`The Number of plants within week ${weeks} is: ${calc_num_plants(weeks,plantsarray)} plants.`);
-console.log(`${num_plants} number of plants will take up ${num_plants*plant_area} meters Squared. ${action()} `);
-console.log("");
-
-
-
-
-
-weeks = 2;
-// //week 2
-// weeks=2;;
-console.log("We are in week 2!");
-console.log(`The Number of plants within week ${weeks} is: ${calc_num_plants(weeks,plantsarray)} plants.`);
-console.log(`${num_plants} number of plants will take up ${num_plants*plant_area} meters Squared. ${action()} `)
-console.log("");
-
-
-weeks = 3;
-// //week 3
-// weeks=3;;
-console.log("We are in week 3!");
-console.log(`The Number of plants within week ${weeks} is: ${calc_num_plants(weeks,plantsarray)} plants.`);
-console.log(`${num_plants} number of plants will take up ${num_plants*plant_area} meters Squared. ${action()} `)
-console.log("");
-
-// Part 2 
-console.log(`If we started with 100 plants and did not prune for 10 Weeks: we would have ${calc_num_plants2(weeks2)} plants.` );
-console.log(`The raduis of this expaned garden would be ${(calc_num_plants2(weeks2) *0.8)^0.5} meters.`);
-
-
-
-
-
-
-
+console.log(`The radius of this expanded garden would be ${((num_plants * one_plant_area) / PI) ** 0.5} meeters squared.`,);
